@@ -32,7 +32,7 @@ Voir [sched.c](sched/sched.c)
 
 _Scheduling avec lottery_
 
-Pour implémenter cette méthode, nous avons du modifier 5 fichiers: [sched.c](nanvix/srv/kernel/pm/sched.c), [fork.c](nanvix/src/kernel/sys/fork.c), [die.c](nanvix/srv/kernel/pm/die.c) et [pm.c](nanvix/srv/kernel/pm/pm.c) / [pm.h](nanvix/include/nanvix/pm.h)
+Pour implémenter cette méthode, nous avons du modifier 5 fichiers: [sched.c](nanvix/src/kernel/pm/sched.c), [fork.c](nanvix/src/kernel/sys/fork.c), [die.c](nanvix/src/kernel/pm/die.c) et [pm.c](nanvix/src/kernel/pm/pm.c) / [pm.h](nanvix/include/nanvix/pm.h)
 
 Dans le fichier **pm.h**, on définit la taille max du tableau de ticket (8 étant le nombre de ticket assignés pour la priorité maximum) :
 ```C
