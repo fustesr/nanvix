@@ -7,13 +7,13 @@ _Scheduling sur les priorités_
 Dans un premier temps, nous avons essayé d’implémenter la méthode par priorité en changeant la condition qui permet de choisir le prochain processus à exécuter. 
 Avant le choix se faisait sur les compteurs (counter), nous avons essayé de faire jouer la priorité dedans.
 
-'''C
+```C
 if (11* p->counter -p->priority > next->11 * counter- next->priority )
 {
 	next->counter++;
  	next = p;
  }
-'''
+```
 
 Cette première implémentation permet de faire intervenir les priorités tout en laissant un impact aux compteurs. C'est à dire qu'un processus A avec une priorité plus grande qu'un autre processus B pourra se faire piquer la place si le compteur du processus B est vraiment trop grand. 
 PS : on règle l'impact des compteurs grâce au coefficients placés devant. Exemple ici : 11
