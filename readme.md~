@@ -8,7 +8,7 @@ Dans un premier temps, nous avons essayé d’implémenter la méthode par prior
 Avant le choix se faisait sur les compteurs (counter), nous avons essayé de faire jouer la priorité dedans.
 
 '''C
-if (11* p->counter -p->priority > next->11 * counter- next->priority )
+If (11* p->counter -p->priority > next->11 * counter- next->priority )
 {
 	next->counter++;
  	next = p;
