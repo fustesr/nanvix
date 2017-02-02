@@ -27,10 +27,6 @@
 
 
 
-PUBLIC int total_ticket = 0;
-
-PUBLIC struct process* tab_ticket[SIZE_TAB_TICKET];
-
 
 unsigned long int next = 1;
 

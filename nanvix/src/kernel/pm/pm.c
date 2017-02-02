@@ -31,7 +31,7 @@
 #include <signal.h>
 #include <limits.h>
 
-PUBLIC int total_ticket = 0;
+PUBLIC int total_ticket;
 
 PUBLIC struct process* tab_ticket[SIZE_TAB_TICKET];
 
