@@ -37,6 +37,8 @@
 	#include <limits.h>
 	#include <signal.h>
 	
+
+
 	/**
 	 * @name Superuser credentials
 	 */
@@ -279,6 +281,16 @@
 	EXTERN struct process *last_proc;
 	EXTERN pid_t next_pid;
 	EXTERN unsigned nprocs;
+
+
+	// Definition tab ticket
+	#define SIZE_TAB_TICKET PROC_MAX*8
+
+	EXTERN void add_ticket(struct process* p);
+
+	EXTERN void defragment();
+
+	EXTERN void remove_ticket(struct process* p);
 
 #endif /* _ASM_FILE */
 

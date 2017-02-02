@@ -31,6 +31,10 @@
 #include <signal.h>
 #include <limits.h>
 
+PUBLIC int total_ticket = 0;
+
+PUBLIC struct process* tab_ticket[SIZE_TAB_TICKET];
+
 /**
  * @brief Idle process page directory.
  */
@@ -120,8 +124,83 @@ PUBLIC void pm_init(void)
 	IDLE->alarm = 0;
 	IDLE->next = NULL;
 	IDLE->chain = NULL;
+
+	//INIT total_ticket
+	total_ticket =0;
 	
 	nprocs++;
 
 	enable_interrupts();
 }
+
+int nb_ticket(int priority){
+	int tickets = -1;
+	switch(priority){
+		case PRIO_IO : 			tickets = 8; break;
+		case PRIO_BUFFER : 		tickets = 7; break;
+		case PRIO_INODE : 		tickets = 6; break;
+		case PRIO_SUPERBLOCK : 	tickets = 5; break;
+		case PRIO_REGION :		tickets = 4; break;
+		case PRIO_TTY : 		tickets = 3; break;
+		case PRIO_SIG : 		tickets = 2; break;
+		case PRIO_USER : 		tickets = 1; break;
+	}
+
+	return tickets;
+}
+
+PUBLIC void add_ticket(struct process* p){
+	int nb_tiquets =nb_ticket(p->priority);
+	total_ticket += nb_tiquets;
+	int i = 0;
+	while(i < SIZE_TAB_TICKET && nb_tiquets > 0){
+		if(tab_ticket[i] == NULL){
+			tab_ticket[i] = p;
+			nb_tiquets--;
+		}
+
+		i++;
+	}
+
+}
+
+
+PUBLIC void defragment(){
+	int i=0, j=0;
+	while(j < SIZE_TAB_TICKET && tab_ticket[j] != NULL){
+		i++;
+		j++;
+	}
+
+	while(j < SIZE_TAB_TICKET ){
+		while(j < SIZE_TAB_TICKET && tab_ticket[j] == NULL){
+			j++;
+		}
+
+		if(j < SIZE_TAB_TICKET){
+			tab_ticket[i] = tab_ticket[j];
+			tab_ticket[j] = NULL;
+		}
+
+		while(i < SIZE_TAB_TICKET && tab_ticket[i] != NULL){
+			i++;
+		}	
+	}
+}
+
+
+PUBLIC void remove_ticket(struct process* p){
+	int nb_tiquets = p->priority;
+	total_ticket -= nb_tiquets;
+	int i = 0;
+	while(i < SIZE_TAB_TICKET && nb_tiquets > 0){
+		if(tab_ticket[i] == p){
+			tab_ticket[i] = NULL;
+			nb_tiquets--;
+		}
+
+		i++;
+	}
+}
+
+

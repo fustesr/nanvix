@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with Nanvix. If not, see <http://www.gnu.org/licenses/>.
+ * along with Nanvix. If not, see <httab_ticket://www.gnu.org/licenses/>.
  */
 
 #include <nanvix/clock.h>
@@ -23,6 +23,25 @@
 #include <nanvix/hal.h>
 #include <nanvix/pm.h>
 #include <signal.h>
+
+
+
+
+PUBLIC int total_ticket = 0;
+
+PUBLIC struct process* tab_ticket[SIZE_TAB_TICKET];
+
+
+unsigned long int next = 1;
+
+int rand(void) {
+	next = next * 1103515245 + 12345;
+	return (unsigned int) (next/65536) % 32768;
+}
+
+int next_process(){
+	return rand()*total_ticket/32768;
+}
 
 /**
  * @brief Schedules a process to execution.
@@ -88,91 +107,38 @@ PUBLIC void yield(void)
 
 	/* Choose a process to run next. */
 	next = IDLE;
-	for (p = FIRST_PROC; p <= LAST_PROC; p++)
-	{
-		/* Skip non-ready process. */
-		if (p->state != PROC_READY)
-			continue;
+	// for (p = FIRST_PROC; p <= LAST_PROC; p++)
+	// {
+	// 	/* Skip non-ready process. */
+	// 	if (p->state != PROC_READY)
+	// 		continue;
 		
-		/*
-		 * Process with higher
-		 * waiting time found.
-		 */
-		if (p->counter -p->priority > next->counter- next->priority)
-		{
-			next->counter++;
-			next = p;
-		}
+		
+	// 	 * Process with higher
+	// 	 * waiting time found.
+		 
+	// 	if (p->counter > next->counter)
+	// 	{
+	// 		next->counter++;
+	// 		next = p;
+	// 	}
 			
-		/*
-		 * Increment waiting
-		 * time of process.
-		 */
-		else
-			p->counter++;
-	}
-	
+	// 	/*
+	// 	 * Increment waiting
+	// 	 * time of process.
+	// 	 */
+	// 	else
+	// 		p->counter++;
+	// }
+
+	do{
+		next = tab_ticket[next_process()];
+	}while(next->state	 != PROC_READY);
+
+
 	/* Switch to next process. */
 	next->priority = PRIO_USER;
 	next->state = PROC_RUNNING;
 	next->counter = PROC_QUANTUM;
 	switch_to(next);
 }
-
-
-// PUBLIC void yield(void)
-// {
-// 	struct process *p;    /* Working process.     */
-// 	struct process *next; /* Next process to run. */
-
-// 	/* Re-schedule process for execution. */
-// 	if (curr_proc->state == PROC_RUNNING)
-// 		sched(curr_proc);
-
-// 	/* Remember this process. */
-// 	last_proc = curr_proc;
-
-// 	/* Check alarm. */
-// 	for (p = FIRST_PROC; p <= LAST_PROC; p++)
-// 	{
-// 		/* Skip invalid processes. */
-// 		if (!IS_VALID(p))
-// 			continue;
-		
-// 		/* Alarm has expired. */
-// 		if ((p->alarm) && (p->alarm < ticks))
-// 			p->alarm = 0, sndsig(p, SIGALRM);
-// 	}
-
-// 	 Choose a process to run next. 
-// 	next = IDLE;
-// 	for (p = FIRST_PROC; p <= LAST_PROC; p++)
-// 	{
-// 		/* Skip non-ready process. */
-// 		if (p->state != PROC_READY)
-// 			continue;
-		
-// 		/*
-// 		 * Process with higher
-// 		 * waiting time found.
-// 		 */
-// 		if (p->counter -p->priority - p->nice > next->counter- next->priority - next->nice)
-// 		{
-// 			next->counter++;
-// 			next = p;
-// 		}
-			
-// 		/*
-// 		 * Increment waiting
-// 		 * time of process.
-// 		 */
-// 		else
-// 			p->counter++;
-// 	}
-	
-// 	/* Switch to next process. */
-// 	next->priority = PRIO_USER;
-// 	next->state = PROC_RUNNING;
-// 	next->counter = PROC_QUANTUM;
-// 	switch_to(next);
-// }
