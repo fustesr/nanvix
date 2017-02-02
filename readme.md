@@ -44,6 +44,16 @@ Vous trouverez dans **pm.c** les fonctions principales utilisées pour la lotter
 
 ** *add_ticket(struct process* p)* : permet d'allouer un nombre de tickets à un processus. Un ticket pour un processus p est un pointeur vers ce processus p. Le tableau de ticket est, de facto, un tableau de pointeur de processus.
 
-** *defragment()* : 
+** *defragment()* : permet de regrouper tous les tickets au début du tableau (tab_ticket) pour pouvoir facilement faire un random dessus.
+
+** *remove_ticket(struct process* p)* : permet de retirer les tickets correspondant à un processus.
+
+** Dans le fichier **sched.c** :
+
+Dans la méthode yield(), il ne s'agit plus maintenant de parcourir le tableau de processus mais de choisir un processus au hasard grace à notre fonction *next_process()* qui utilise notre fonction *rand()*. Le tirage se fait du début du tableau jusqu'à *$total_ticket* (c'est ici que sert la fonction defragment()).
+
+Dans le fichier **fork.c** et **die.c** :
+
+Dans ces fichiers, on utilise nos fonctions pour assigner des tickets à la création d'un processus (*add_ticket*) et les retirer à la destruction d'un processus (*remove_ticket* et *defragment*).
 
   
